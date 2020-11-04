@@ -1,2 +1,22 @@
-# simulate-LISP-string-operation
-huawei 2017 Interview questions
+## huawei 2017 Interview questions
+
+2017华为机试（仿LISP字符串运算）
+
+题目描述
+
+LISP语言唯一的语法就是括号要配对。
+
+形如 (OP P1 P2 …)，括号内元素由单个空格分割。
+
+其中第一个元素OP为操作符，后续元素均为其参数，参数个数取决于操作符类型
+
+注意：参数 P1, P2 也有可能是另外一个嵌套的 (OP P1 P2 …)
+
+当前OP类型为add/sub/mul/div(全小写)，分别代表整数的加减乘除法。简单起见，所以OP参数个数为2
+
+举例
+
+输入：(mul 3 -7)                输出：-21
+输入：(add 1 2)                 输出：3
+输入：(sub (mul 2 4) (div 9 3)) 输出 ：5
+输入：(div 1 0)                 输出：error
