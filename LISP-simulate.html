@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2017华为机试（仿LISP字符串运算）</title>
+</head>
+<body>
+<pre>
+2017华为机试（仿LISP字符串运算）
+
+[编程|300分] 仿LISP字符串运算
+题目描述
+LISP语言唯一的语法就是括号要配对。
+形如 (OP P1 P2 …)，括号内元素由单个空格分割。
+其中第一个元素OP为操作符，后续元素均为其参数，参数个数取决于操作符类型
+注意：参数 P1, P2 也有可能是另外一个嵌套的 (OP P1 P2 …)
+当前OP类型为add/sub/mul/div(全小写)，分别代表整数的加减乘除法。简单起见，所以OP参数个数为2
+举例
+输入：(mul 3 -7)                输出：-21
+输入：(add 1 2)                 输出：3
+输入：(sub (mul 2 4) (div 9 3)) 输出 ：5
+输入：(div 1 0)                 输出：error
+</pre>
+<pre id="output">运行结果:</pre>
+
+
+
+
+<script>
+var calculator={// 计算器
+    "add":function(a,b){return a+b;},
+    "sub":function(a,b){return a-b;},
+    "mul":function(a,b){return a*b;},
+    "div":function(a,b){return a/b;},
+};
+function isOP(token){// 判断是否为运算符
+    return Object.getOwnPropertyNames(calculator).includes(token);
+}
+var stack=[];
+function eval(express){
+    let lb=express.lastIndexOf("(");
+    if(-1!=lb){
+        let rb=express.indexOf(")",lb);
+        if (-1!=rb) return eval(`${express.substring(0,lb)} ${eval(express.substring(lb+1,rb))} ${express.substring(rb+1)}`);
+    }
+    let tokens=express.trim().split(" ");
+    while(tokens.length>0){
+        let token=tokens.shift();
+        if(token.length<1)continue;
+        stack.push(token);
+    }
+    let op=stack.shift();
+    if(!isOP(op))return Number(op);
+    let result = calculator[op](Number(stack.shift()),Number(stack.shift()));
+    return result;
+}
+let tester = {// 测试用例 表达式:预期结果
+    " ( mul 3 -7 ) "                    :-21,
+    " ( add 1 2 ) "                     :3,
+    " ( sub ( mul 2 4 ) ( div 9 3 ) ) " :5,
+    " ( div 1 0 ) "                     :Infinity
+};
+Object.getOwnPropertyNames(tester).forEach(function(express){
+    var result=eval(express);
+    document.getElementById('output').innerHTML+=`\n[测试结果：${result==tester[express]}] 表达式：${express} 结果：${result}`;
+});
+</script>
+</body>
+</html>
